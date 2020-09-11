@@ -212,7 +212,7 @@ class EditPatient extends React.Component {
     await fetch(`http://localhost:8080/patients/${this.props.match.params.id}`, init).then((res) => {
       this.setState({loading: false})
       if (res.status === 200) {
-        window.location.replace('/');
+        window.location.replace(`/patients/${this.props.match.params.id}`);
       }
       else {
         this.setState({oops: 'Oops something went wrong on our end, we are working to fix it', loading: false})

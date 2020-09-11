@@ -70,12 +70,13 @@ constructor(props) {
             <Jumbotron key={this.state.patient.id} fluid>
             <h1>{this.state.patient.firstName + " " + this.state.patient.lastName}
             </h1>
-              <p className="mb-2 text-muted">{this.state.patient.gender}, {this.state.patient.age}</p>
+            <div style={{margin:'2rem'}}>
+              <p className="h5">{this.state.patient.gender}, {this.state.patient.age}</p>
               <p >
                 Height: {this.state.patient.height} Inches. Weight: {this.state.patient.weight}lbs
               </p>
               <p>
-                Insurance {this.state.patient.insurance}
+                Insurance: {this.state.patient.insurance}
               </p>
               <p>
                 SSN: {this.state.patient.ssn}
@@ -83,6 +84,7 @@ constructor(props) {
               <p>
                 Address: {this.state.patient.street}, {this.state.patient.city}, {this.state.patient.state}, {this.state.patient.postal}
               </p>
+            </div>
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
             onClick={()=> window.location.replace(`/patients/edit/${this.state.patient.id}`)}>Edit</Button>
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
