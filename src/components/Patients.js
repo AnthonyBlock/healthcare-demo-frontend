@@ -11,9 +11,12 @@ constructor(props) {
     loading: true,
     oops: "",
     patients: [],
+    hovered: null
   };
 
 }
+
+
 
   async getPatients() {
     let init = {
@@ -68,17 +71,24 @@ constructor(props) {
       <div>
         {
         this.state.patients.map(patient =>
-            <Card key={patient.id} style={{ width: '18rem', display: 'inline-block'}}>
+            <Card key={patient.id}
+             style={{ width: '18rem', height:'8rem', display: 'inline-block'}}
+              onClick={()=> window.location.replace(`/patients/${patient.id}`)}
+              border={this.state.hovered === patient.id ? 'warning': 'primary'}
+              onMouseEnter={()=>{
+                this.setState({hovered: patient.id});
+              }}
+              onMouseLeave={()=>{
+                this.setState({hovered: null});
+              }}>
+            <Card.Header>{patient.firstName + " " + patient.lastName}
+            </Card.Header>
             <Card.Body>
-            <Card.Title>{patient.firstName + " " + patient.lastName}
-            </Card.Title>
               <Card.Subtitle className="mb-2 text-muted">Age: {patient.age}</Card.Subtitle>
               <Card.Text style={{display: "-webkit-box", WebkitLineClamp: '9', WebkitBoxOrient: 'vertical', height: '10rem'}}>
                 {patient.gender}
               </Card.Text>
-            </Card.Body>
-            <Button variant="secondary" style={{margin: '2%'}} onClick={()=> window.location.replace(`/patients/${patient.id}`)}>Details</Button>
-  
+            </Card.Body>  
           </Card>
             )}
   

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, Spinner } from 'react-bootstrap';
+import { Card, Button, Spinner, Jumbotron } from 'react-bootstrap';
 
 
 export default class PatientDetails extends React.Component {
@@ -67,34 +67,28 @@ constructor(props) {
 
     return (
       <div>
-            <Card key={this.state.patient.id} style={{ width: '18rem', display: 'inline-block'}}>
-            <Card.Body>
-            <Card.Title>{this.state.patient.firstName + " " + this.state.patient.lastName}
-            </Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{this.state.patient.gender}, {this.state.patient.age}</Card.Subtitle>
-              <Card.Text >
-
-              </Card.Text>
-              <Card.Text >
-                Height: {this.state.patient.height} Inches
-              </Card.Text>
-              <Card.Text >
-                Weight: {this.state.patient.weight}lbs
-              </Card.Text>
-              <Card.Text >
+            <Jumbotron key={this.state.patient.id} fluid>
+            <h1>{this.state.patient.firstName + " " + this.state.patient.lastName}
+            </h1>
+              <p className="mb-2 text-muted">{this.state.patient.gender}, {this.state.patient.age}</p>
+              <p >
+                Height: {this.state.patient.height} Inches. Weight: {this.state.patient.weight}lbs
+              </p>
+              <p>
                 Insurance {this.state.patient.insurance}
-              </Card.Text>
-              <Card.Text >
+              </p>
+              <p>
                 SSN: {this.state.patient.ssn}
-              </Card.Text>
-              <Card.Text >
-                Address: {this.state.patient.street} {this.state.patient.city}, {this.state.patient.state}, {this.state.patient.postal}
-              </Card.Text>
-            </Card.Body>
-          </Card>   
-  
+              </p>
+              <p>
+                Address: {this.state.patient.street}, {this.state.patient.city}, {this.state.patient.state}, {this.state.patient.postal}
+              </p>
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
             onClick={()=> window.location.replace(`/patients/edit/${this.state.patient.id}`)}>Edit</Button>
+            <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
+            onClick={()=> window.location.replace(`/patients/edit/${this.state.patient.id}`)}>Delete</Button>
+          </Jumbotron>   
+  
         </div>
     );
   }
