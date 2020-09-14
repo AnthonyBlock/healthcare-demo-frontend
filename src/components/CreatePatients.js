@@ -213,7 +213,7 @@ class CreatePatient extends React.Component {
         window.location.replace('/');
       }
       else {
-        this.setState({oops: 'Oops something went wrong on our end, we are working to fix it', loading: false})
+        this.setState({oops: 'Oops something went wrong on our end, status ' + res.status, loading: false})
       }
     })}
   

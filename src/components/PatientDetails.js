@@ -11,12 +11,17 @@ constructor(props) {
     loading: true,
     patient: null,
     oops: "",
-    encounters: []
+    encounters: [],
+    hovered: ""
   };
 
 }
 
-  async getPatients() {
+  async deletePatient(){
+
+  }
+
+  async getPatient() {
     let init = {
       method: 'GET',
       headers: new Headers({
@@ -34,15 +39,43 @@ constructor(props) {
   let data2 = await response2.json();
   return data2;
   }
-  }
+}
+
+async getEncouunters() {
+  let init = {
+    method: 'GET',
+    headers: new Headers({
+    'Content-Type': 'application/json',
+    'mode': 'cors',
+  }),
+};
+
+let url2 = `http://localhost:8080/patients/${this.props.match.params.id}/encounters`;
+let response2 = await fetch(url2, init);
+if (!response2.ok) {
+  return null;
+}
+else{
+let data2 = await response2.json();
+return data2;
+}
+}
 
   /**
-   * makes a GET all call to the backend, if succesful passes all rooms into state, if unsuccesful displays an error message
+   * makes a GET all call to the backend, if succesful passes all patients and appropriate encoutners into state, if unsuccesful displays an error message
    */
   async componentDidMount() {
-    await this.getPatients().then((data => {
+    await this.getPatient().then((data => {
       if (data) {
         this.setState({patient: data, loading: false})
+      }
+      else {
+        this.setState({oops: 'Something went wrong on our end, we are working on fixing it', loading: false})
+      }
+    }))
+    await this.getEncouunters().then((data => {
+      if (data) {
+        this.setState({encounters: data, loading: false})
       }
       else {
         this.setState({oops: 'Something went wrong on our end, we are working on fixing it', loading: false})
@@ -88,9 +121,37 @@ constructor(props) {
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
             onClick={()=> window.location.replace(`/patients/edit/${this.state.patient.id}`)}>Edit</Button>
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
-            onClick={()=> window.location.replace(`/patients/edit/${this.state.patient.id}`)}>Delete</Button>
+            onClick={()=> this.deletePatient()}>Delete</Button>
           </Jumbotron>   
-  
+          {
+        this.state.encounters.map(encounter =>
+            <Card key={encounter.id}
+             style={{ display: 'inline-block', margin: '1%'}}
+              onClick={()=> window.location.replace(`/enconters/${encounter.id}`)}
+              border={this.state.hovered === encounter.id ? 'warning': 'primary'}
+              onMouseEnter={()=>{
+                this.setState({hovered: encounter.id});
+              }}
+              onMouseLeave={()=>{
+                this.setState({hovered: null});
+              }}>
+            <Card.Header>Encounter Id: {encounter.id}
+            </Card.Header>
+            <Card.Body>
+            <Card.Subtitle className="mb-2 text-muted">{encounter.date}</Card.Subtitle>
+              <Card.Text style={{display: "-webkit-box", WebkitLineClamp: '9', WebkitBoxOrient: 'vertical'}}>
+                Provider: {encounter.provider}
+              </Card.Text>
+              <Card.Text style={{display: "-webkit-box", WebkitLineClamp: '9', WebkitBoxOrient: 'vertical'}}>
+                Visit Code: {encounter.visitCode}
+              </Card.Text>
+            </Card.Body>  
+          </Card>
+            )}
+            <Button variant="secondary" style={{margin:"2%"}}
+            onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}/encounters/create`)}>New Encounter</Button>
+                        <Button variant="secondary" style={{margin:"2%"}}
+            onClick={()=> window.location.replace(`/`)}>Back</Button>
         </div>
     );
   }

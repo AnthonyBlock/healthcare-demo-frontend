@@ -9,6 +9,7 @@ import CreatePatient from './components/CreatePatients';
 import Patients from './components/Patients';
 import PatientDetails from './components/PatientDetails'
 import EditPatient from './components/EditPatient';
+import CreateEncounter from './components/CreateEncounter';
 
 class App extends React.Component {
 
@@ -40,6 +41,7 @@ render() {
           </Route>
           <Route exact path ="/patients/:id" render={(props) => (<PatientDetails {...props}/>)}/>
           <Route exact path ="/patients/edit/:id" render={(props) => (<EditPatient {...props}/>)}/>
+          <Route exact path ="/patients/:id/encounters/create" render={(props) => (<CreateEncounter {...props}/>)}/>
         </Switch>
         </BrowserRouter>
 
