@@ -50,7 +50,7 @@ class CreateEncounter extends React.Component {
   * 
   * @param {*} event 
   */
-  handleSubmit(event) {
+  handleSubmit = (event) => {
 
     let isReadytoSubmit = true;
 
@@ -196,7 +196,7 @@ class CreateEncounter extends React.Component {
     await fetch(`http://localhost:8080/patients/${this.props.match.params.id}/encounters`, init).then((res) => {
       this.setState({loading: false})
       if (res.status === 201) {
-        window.location.replace('/');
+        window.location.replace(`/patients/${this.props.match.params.id}`);
       }
       else {
         this.setState({oops: 'Oops something went wrong on our end, status ' + res.status, loading: false})
@@ -222,7 +222,8 @@ render(){
 
   return (
     <div>
-      <div style={{color: 'red'}}>{this.state.oops}</div>
+
+    <div style={{color: 'red'}}>{this.state.oops}</div>
 
     <Form noValidate validated={this.state.validated} onSubmit={(e) => this.handleSubmit(e)}>
       <Form.Row>

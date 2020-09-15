@@ -47,7 +47,7 @@ constructor(props) {
         this.setState({patients: data, loading: false})
       }
       else {
-        this.setState({oops: 'Something went wrong on our end, we are working on fixing it', loading: false})
+        this.setState({oops: 'Something went wrong on our end', loading: false})
       }
     }))
 

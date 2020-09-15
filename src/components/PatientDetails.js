@@ -18,8 +18,25 @@ constructor(props) {
 }
 
   async deletePatient(){
-
-  }
+    if (this.state.encounters.length === 0) {
+      let init = {
+        method: 'DELETE',
+        headers: new Headers({
+        'Content-Type': 'application/json',
+        'mode': 'cors',
+      }),
+    };
+  
+    let url2 = `http://localhost:8080/patients/${this.props.match.params.id}`;
+    await fetch(url2, init).then((res) => {
+      if (!res.status === 204) {
+        this.setState({oops: 'Something went wrong on our end status: ' + res.status, loading: false})
+      }
+      else{
+        window.location.replace(`/`)
+    }
+    })}}
+    
 
   async getPatient() {
     let init = {
@@ -127,7 +144,7 @@ return data2;
         this.state.encounters.map(encounter =>
             <Card key={encounter.id}
              style={{ display: 'inline-block', margin: '1%'}}
-              onClick={()=> window.location.replace(`/enconters/${encounter.id}`)}
+              onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}/encounters/${encounter.id}`)}
               border={this.state.hovered === encounter.id ? 'warning': 'primary'}
               onMouseEnter={()=>{
                 this.setState({hovered: encounter.id});
@@ -150,7 +167,7 @@ return data2;
             )}
             <Button variant="secondary" style={{margin:"2%"}}
             onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}/encounters/create`)}>New Encounter</Button>
-                        <Button variant="secondary" style={{margin:"2%"}}
+            <Button variant="secondary" style={{margin:"2%"}}
             onClick={()=> window.location.replace(`/`)}>Back</Button>
         </div>
     );
