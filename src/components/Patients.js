@@ -17,7 +17,9 @@ constructor(props) {
 }
 
 
-
+  /**
+   * Fetches all patients from the backend and returns them as a json array
+   */
   async getPatients() {
     let init = {
       method: 'GET',
@@ -39,7 +41,7 @@ constructor(props) {
   }
 
   /**
-   * makes a GET all call to the backend, if succesful passes all rooms into state, if unsuccesful displays an error message
+   * makes a GET all call to the backend, if succesful passes all patients into state, if unsuccesful displays an error message
    */
   async componentDidMount() {
     await this.getPatients().then((data => {

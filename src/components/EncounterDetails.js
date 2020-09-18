@@ -15,6 +15,9 @@ constructor(props) {
 
 }
 
+  /**
+   * Deletes the mapped encounter and redirects back to the corresponding patient
+   */
   async deleteEncounter(){
       let init = {
       method: 'DELETE',
@@ -33,6 +36,9 @@ constructor(props) {
   }
   })}
 
+  /**
+   * Fetches the corresponding encounter based on the page's url from the backend
+   */
   async getEncounter() {
     let init = {
       method: 'GET',
@@ -54,7 +60,7 @@ constructor(props) {
 }
 
   /**
-   * makes a GET all call to the backend, if succesful passes all patients and appropriate encoutners into state, if unsuccesful displays an error message
+   * Calls getEncounter to make a call to the backend and passes the result, if ok, into state
    */
   async componentDidMount() {
     await this.getEncounter().then((data => {

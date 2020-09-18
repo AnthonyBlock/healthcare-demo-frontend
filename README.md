@@ -1,68 +1,57 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Description
+Demonstates a mock-up health care logging system, allowing creation and management of patients with associated encounters and management of those encounters
 
-In the project directory, you can run:
+### Usage
+Start by booting the backend AppRunner.java in ransom-final-backend, then navigate to ransom-final-frontend after installing dependencies and run "npm start"
 
-### `npm start`
+### Testing
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Import the testing library: "npm install @testing-library/react"
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+To run testing with coverage, run 'npm test a -- --coverage"
 
-### `npm test`
+### Dependencies
+react, to isntall run "npm i react" in the root directory ransom-final-frontend
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+react-with-bootstrap, to install run "npm i react-with-bootstrap" in the root directory ransom-final-frontend
 
-### `npm run build`
+### Linting
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Currently the project is unlinted, to install linting, run "npm install eslint-config-airbnb eslint-plugin-jsx-a11y typescript @typescript-eslint/parser", 
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+THEN, create a .eslintrc file, and add:
+{
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  "extends": [
 
-### `npm run eject`
+	"react-app",
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+	"airbnb",
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+	"airbnb/hooks",
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+	"plugin:jsx-a11y/recommended"
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  ],
 
-## Learn More
+  "plugins": ["jsx-a11y"],
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  "rules": {
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+	"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
 
-### Code Splitting
+	"linebreak-style": 0,
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+    "comma-dangle": ["error", "never"],
 
-### Analyzing the Bundle Size
+    "react/prop-types": 0
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+  }
 
-### Making a Progressive Web App
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+THEN, add "lint": "eslint . --fix" to line 22 of package.json, and "run npm run lint" in the root directory
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

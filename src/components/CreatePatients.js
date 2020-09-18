@@ -38,13 +38,13 @@ class CreatePatient extends React.Component {
       height: null,
       weight: null,
       insurance: '',
-      gender: ''
+      gender: 'Male'
       }
 
     }
  }
 
- /**Validates input values, if they all pass, calls handlecreateRoom
+ /**Validates input values from form, if they all pass, calls handleCreatePatient
   * 
   * @param {*} event 
   */
@@ -175,17 +175,6 @@ class CreatePatient extends React.Component {
     else{
       this.setState({insuranceErrors: ""})
     }
-
-    if (!/^(?!\s*$).+/.test(this.state.inputs.gender)){
-      this.setState({genderErrors: "Please select a gender"})
-      event.preventDefault();
-      event.stopPropagation();
-      isReadytoSubmit = false;
-    }
-    else{
-      this.setState({genderErrors: ""})
-    }
-
 
     if (isReadytoSubmit) {
       this.setState({validated: true})
@@ -435,7 +424,6 @@ render(){
           <Form.Label>Gender</Form.Label>
           <Form.Control as="select" required value={this.state.gender}
               onChange={(e) => this.setState({inputs: {...this.state.inputs, gender: e.target.value} })}>
-                <option value={""}></option>
                 <option value={'Male'} key={'male'}>Male</option>
                 <option value={'Female'} key={'female'}>Female</option>
                 <option value={'Other'} key={'other'}>Other</option>
@@ -445,6 +433,8 @@ render(){
         </Form.Group>
       </Form.Row>
       <Button variant="secondary" type='submit'>Create</Button>
+      <Button variant="secondary" style={{margin: '2%'}}
+    onClick={()=> window.location.replace(`/`)}>Back</Button>
     </Form>
     </div>
   )

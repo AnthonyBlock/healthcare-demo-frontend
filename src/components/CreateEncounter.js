@@ -46,7 +46,7 @@ class CreateEncounter extends React.Component {
     }
  }
 
- /**Validates input values, if they all pass, calls handlecreateRoom
+ /**Validates input values from form, if they all pass, calls handleCreateEncounter
   * 
   * @param {*} event 
   */
@@ -179,7 +179,7 @@ class CreateEncounter extends React.Component {
     }
     }
 
-  /**Takes inputs from handleSubmit and makes post call. If receives a 201, redirects, otherwise shows an error message
+  /**Takes inputs from handleSubmit and makes post call. If receives a 201, redirects, otherwise shows an error message with the response status
    * 
    * @param {*} inputs 
    */
@@ -353,13 +353,15 @@ render(){
       <Form.Row>
         <Form.Group as={Col} md="6" >
           <Form.Label>Date</Form.Label>
-          <Form.Control type="date" format="yyyy-mm-dd" required value={this.state.date}
+          <Form.Control type="date" format="yyyy-mm-dd" placeholder="YYYY-MM-DD" required value={this.state.date}
               onChange={(e) => this.setState({inputs: {...this.state.inputs, date: e.target.value} })}>
           </Form.Control>
           <div style={{color: 'red', margin: '0rem'}}>{this.state.dateErrors}</div>
         </Form.Group>
       </Form.Row>
       <Button variant="secondary" type='submit'>Create</Button>
+      <Button variant="secondary" style={{margin: '2%'}}
+    onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}`)}>Back</Button>
     </Form>
     </div>
   )

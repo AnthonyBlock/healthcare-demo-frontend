@@ -45,7 +45,7 @@ class EditPatient extends React.Component {
     }
  }
 
- /**Validates input values, if they all pass, calls handlecreatePatient
+ /**Validates input values, if they all pass, calls handleUpdatePatient
   * 
   * @param {*} event 
   */
@@ -504,7 +504,12 @@ render(){
         </Form.Group>
       </Form.Row>
       <Button variant="secondary" type='submit'>Update</Button>
+      <Button variant="secondary" style={{margin: '2%'}}
+    onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}`)}>Back</Button>
+      <Button variant="secondary" style={{margin: '2%'}}
+    onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}`)}>Back</Button>
     </Form>
+
     </div>
   )
   }

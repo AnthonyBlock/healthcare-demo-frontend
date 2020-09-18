@@ -12,11 +12,14 @@ constructor(props) {
     patient: null,
     oops: "",
     encounters: [],
-    hovered: ""
+    hovered: "",
+    oopsDelete:""
   };
 
 }
-
+  /**
+   * Checks if the patient has any encounters connected to it, if not, deletes the patient and redirects to the homepage
+   */
   async deletePatient(){
     if (this.state.encounters.length === 0) {
       let init = {
@@ -35,9 +38,15 @@ constructor(props) {
       else{
         window.location.replace(`/`)
     }
-    })}}
+    })}
+    else{
+      this.setState({oopsDelete: "Cannot delete a patient with tied encounters. Delete each encounter first."})
+    }
+  }
     
-
+  /**
+   * Fetches the corresponding patient based off the id in the url and returns it as a json object
+   */
   async getPatient() {
     let init = {
       method: 'GET',
@@ -58,6 +67,9 @@ constructor(props) {
   }
 }
 
+/**
+ * Gets all encounters corresponding to the patient's id from the backend and returns them in a json array
+ */
 async getEncouunters() {
   let init = {
     method: 'GET',
@@ -79,7 +91,7 @@ return data2;
 }
 
   /**
-   * makes a GET all call to the backend, if succesful passes all patients and appropriate encoutners into state, if unsuccesful displays an error message
+   * makes a GET all call to the backend, if succesful passes the patient and appropriate encounters into state, if unsuccesful displays an error message
    */
   async componentDidMount() {
     await this.getPatient().then((data => {
@@ -139,7 +151,9 @@ return data2;
             onClick={()=> window.location.replace(`/patients/edit/${this.state.patient.id}`)}>Edit</Button>
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
             onClick={()=> this.deletePatient()}>Delete</Button>
+          <div style={{color: 'red', margin: "0rem"}}>{this.state.oopsDelete}</div>
           </Jumbotron>   
+          <h5 style={{margin: "2%"}}>Encounters</h5>
           {
         this.state.encounters.map(encounter =>
             <Card key={encounter.id}
