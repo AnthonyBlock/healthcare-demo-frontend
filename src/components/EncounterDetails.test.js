@@ -4,11 +4,13 @@ import {
   } from "react-router-dom";
   import '@testing-library/jest-dom/extend-expect';
   import {render, waitForElement} from '@testing-library/react';
-  import Patients from './Patients.js';
   import {unmountComponentAtNode } from "react-dom";
   import { act } from "react-dom/test-utils";
+import EncounterDetails from './EncounterDetails.js';
 
 let container = null;
+const match = {params : { id: 3, patientId: 1} }
+
 beforeEach(() => {
   // setup a DOM element as a render target
   container = document.createElement("div");
@@ -24,56 +26,39 @@ afterEach(() => {
 
 
 it('renders with loading spinner', () => {
-    const { getByText } = render(<BrowserRouter><Patients/></BrowserRouter>);
+    const { getByText } = render(<BrowserRouter><EncounterDetails match={match}/></BrowserRouter>);
     expect(getByText('Loading...')).toBeInTheDocument();
   });
 
 
 
-  it("renders with patients data", async () => {
-    const fakePatients = [{
-      age: 11,
-      city: "Marksville",
-      email: "markmarky@email.com",
-      firstName: "Mark",
-      gender: "Male",
-      height: 111,
-      id: 1,
-      insurance: "Blue Cross Blue Shield",
-      lastName: "Marky",
-      postal: "11111",
-      ssn: "111-11-1111",
-      state: "IL",
-      street: "Mark Street",
-      weight: 111
-    },
-    {
-      age: 22,
-      city: "Matthewsville",
-      email: "matthewmatthias@email.com",
-      firstName: "Matthew",
-      gender: "Female",
-      height: 222,
-      id: 2,
-      insurance: "Blue Cross Blue Shield",
-      lastName: "Matthias",
-      postal: "22222",
-      ssn: "222-22-2222",
-      state: "IL",
-      street: "Matthew Street",
-      weight: 222
-      
+  it("renders with encounter data", async () => {
+    const fakeEncounter = {
+    billingCode: "123.456.789-00",
+    chiefComplaint: "chiefComplaint",
+    copay: 10,
+    date: "2020-09-19",
+    diastolic: 100,
+    icd10: "Z99",
+    id: 3,
+    notes: "new encounter",
+    patientId: 1,
+    provider: "New Hospital",
+    pulse: 100,
+    systolic: 100,
+    totalCost: 100,
+    visitCode: "N3W 3C3",
     }
-  ];
+  ;
     jest.spyOn(global, "fetch").mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve(fakePatients)
+        json: () => Promise.resolve(fakeEncounter)
       })
     );
   
     // Use the asynchronous version of act to apply resolved promises
     await act(async () => {
-      render(<Patients/>, container);
+      render(<EncounterDetails match={match}/>, container);
     });
 
     // remove the mock to ensure tests are completely isolated

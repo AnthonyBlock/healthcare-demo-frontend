@@ -3,12 +3,14 @@ import {
     BrowserRouter,
   } from "react-router-dom";
   import '@testing-library/jest-dom/extend-expect';
-  import {render, waitForElement} from '@testing-library/react';
-  import Patients from './Patients.js';
+  import {render, waitForElement, fireEvent} from '@testing-library/react';
   import {unmountComponentAtNode } from "react-dom";
   import { act } from "react-dom/test-utils";
+import PatientDetails from './PatientDetails.js';
 
 let container = null;
+const match = {params : { id: 1 } }
+
 beforeEach(() => {
   // setup a DOM element as a render target
   container = document.createElement("div");
@@ -23,15 +25,16 @@ afterEach(() => {
 });
 
 
+
+
 it('renders with loading spinner', () => {
-    const { getByText } = render(<BrowserRouter><Patients/></BrowserRouter>);
+    const { getByText } = render(<BrowserRouter><PatientDetails match={match}/></BrowserRouter>);
     expect(getByText('Loading...')).toBeInTheDocument();
   });
 
-
-
-  it("renders with patients data", async () => {
-    const fakePatients = [{
+  
+  it("renders with patient data", async () => {
+    const fakePatient = {
       age: 11,
       city: "Marksville",
       email: "markmarky@email.com",
@@ -46,34 +49,16 @@ it('renders with loading spinner', () => {
       state: "IL",
       street: "Mark Street",
       weight: 111
-    },
-    {
-      age: 22,
-      city: "Matthewsville",
-      email: "matthewmatthias@email.com",
-      firstName: "Matthew",
-      gender: "Female",
-      height: 222,
-      id: 2,
-      insurance: "Blue Cross Blue Shield",
-      lastName: "Matthias",
-      postal: "22222",
-      ssn: "222-22-2222",
-      state: "IL",
-      street: "Matthew Street",
-      weight: 222
-      
-    }
-  ];
+    };
     jest.spyOn(global, "fetch").mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve(fakePatients)
+        json: () => Promise.resolve(fakePatient)
       })
     );
   
     // Use the asynchronous version of act to apply resolved promises
     await act(async () => {
-      render(<Patients/>, container);
+      render(<PatientDetails match={match}/>, container);
     });
 
     // remove the mock to ensure tests are completely isolated
