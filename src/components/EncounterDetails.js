@@ -120,7 +120,7 @@ constructor(props) {
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
             onClick={()=> this.deleteEncounter()}>Delete</Button>
             <Button variant="secondary" style={{margin: '2%', width: '7rem', height: '2.5rem'}}
-            onClick={()=> window.location.replace(`/patients/${this.props.match.params.patientId}`)}>Back</Button>
+            onClick={()=> window.location.replace(`/patientDetails/${this.props.match.params.patientId}`)}>Back</Button>
         </div>
     );
   }

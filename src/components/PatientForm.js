@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Form, Button, InputGroup, Col, Spinner,  } from 'react-bootstrap'
 
-class EditPatient extends React.Component {
+class PatientForm extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       loading: true,
-      patient: null,
+      patient: "",
       validated: false,
       firstNameErrors: "",
       lastNameErrors: "",
@@ -191,8 +191,50 @@ class EditPatient extends React.Component {
     if (isReadytoSubmit) {
       event.preventDefault();
       this.setState({validated: true})
-      this.handleUpdatePatient(this.state.inputs)
+      if (this.props.match.params.utility === 'create'){
+        this.handleCreatePatient(this.state.inputs)
     }
+    if (this.props.match.params.utility === 'edit'){
+        this.handleUpdatePatient(this.state.inputs)
+    }
+    }
+    }
+
+     /**Takes inputs from handleSubmit and makes post call. If receives a 201, redirects, otherwise shows an error message
+   * 
+   * @param {*} inputs 
+   */
+  async handleCreatePatient(inputs){
+    this.setState({loading: true})
+
+    let init = {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'mode': 'cors'}),
+      body: JSON.stringify(inputs)
+    };
+    await fetch('http://localhost:8080/patients', init).then((res) => {
+      this.setState({loading: false})
+      if (res.status === 201) {
+        window.location.replace('/');
+      }
+      else {
+        this.setState({oops: 'Oops something went wrong on our end, status ' + res.status, loading: false})
+      }
+    })}
+
+    /**Redirects to the appropriate page on click of the "Back" button
+     * 
+     * @param {} inputs 
+     */
+    backHandler = () => {
+        if (this.props.match.params.utility === 'create') {
+            window.location.replace(`/`)
+        }
+        if (this.props.match.params.utility === 'edit') {
+            window.location.replace(`/patientDetails/${this.props.match.params.id}`)
+        }
     }
 
   /**Takes inputs from handleSubmit and makes post call. If receives a 201, redirects, otherwise shows an error message
@@ -243,6 +285,10 @@ class EditPatient extends React.Component {
        * makes a GET all call to the backend, if succesful passes all rooms into state, if unsuccesful displays an error message
        */
       async componentDidMount() {
+        if (this.props.match.params.utility === 'create'){
+            this.setState({loading: false})
+        }
+        if (this.props.match.params.utility ==='edit') {
         await this.getPatients().then((data => {
           if (data) {
             this.setState({patient: data, loading: false, inputs: 
@@ -267,7 +313,7 @@ class EditPatient extends React.Component {
             this.setState({oops: 'Something went wrong on our end, we are working on fixing it', loading: false})
           }
         }))
-    
+        }
       }
 
 render(){
@@ -503,15 +549,16 @@ render(){
 
         </Form.Group>
       </Form.Row>
-      <Button variant="secondary" type='submit'>Update</Button>
+      {this.props.match.params.utility === 'create' && <Button variant="secondary" type='submit'>Create</Button>}
+
+      {this.props.match.params.utility === 'edit' && <Button variant="secondary" type='submit'>Update</Button>}
+
       <Button variant="secondary" style={{margin: '2%'}}
-    onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}`)}>Back</Button>
-      <Button variant="secondary" style={{margin: '2%'}}
-    onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}`)}>Back</Button>
+        onClick={this.backHandler}>Back</Button>
     </Form>
 
     </div>
   )
   }
 }
-export default EditPatient;
+export default PatientForm;

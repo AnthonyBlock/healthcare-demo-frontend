@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, InputGroup, Col, Spinner,  } from 'react-bootstrap'
+import { Form, Button, InputGroup, Col, Spinner,  } from 'react-bootstrap';
 
 class EncounterForm extends React.Component {
 
@@ -70,6 +70,20 @@ class EncounterForm extends React.Component {
         this.setState({inputs: {...this.state.inputs, billingCode : e.target.value + "-"}})
       }
     }
+ }
+
+ onVisitCodeChange = (e) => {
+   const re = /^[A-Za-z0-9]*$/;
+   const code = e.target.value
+   const firstCode = code.slice(0,3)
+   const secondCode = code.slice(4,7)
+   const filteredCode = firstCode + secondCode
+   if(e.target.value === '' || re.test(filteredCode)){
+     this.setState({inputs: {...this.state.inputs, visitcode: e.target.value}})
+     if (e.target.value.length === 3) {
+       this.setState({inputs: {...this.state.inputs, visitCode: e.target.value + " "}})
+     }
+   }
  }
 
  /**Validates input values from form, if they all pass, calls handleCreateEncounter
@@ -351,7 +365,8 @@ render(){
             maxLength={7}
             defaultValue={this.state.encounter.visitCode}
             placeholder="ex. A1S 2D3"
-            onChange={(e) => this.setState({inputs: {...this.state.inputs, visitCode: e.target.value} })}
+            value={this.state.inputs.visitCode}
+            onChange={this.onVisitCodeChange}
           />
           <div style={{color: 'red', margin: '0rem'}}>{this.state.visitCodeErrors}</div>
         </Form.Group>

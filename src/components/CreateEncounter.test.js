@@ -6,7 +6,7 @@ import {
   import '@testing-library/jest-dom/extend-expect';
   import { render, fireEvent } from '@testing-library/react';
 
-  const match = {params : { id: 1 } }
+  const match = {params : { patientId: 1, id: 4, utility: 'create' } }
 
 it('Component renders properly', () => {
     const { getByText } = render(<BrowserRouter><CreateEncounter match={match}/></BrowserRouter>);

@@ -75,7 +75,7 @@ constructor(props) {
         this.state.patients.map(patient =>
             <Card key={patient.id}
              style={{ width: '18rem', height:'8rem', display: 'inline-block'}}
-              onClick={()=> window.location.replace(`/patients/${patient.id}`)}
+              onClick={()=> window.location.replace(`/patientDetails/${patient.id}`)}
               border={this.state.hovered === patient.id ? 'warning': 'primary'}
               onMouseEnter={()=>{
                 this.setState({hovered: patient.id});
