@@ -56,7 +56,7 @@ class EditEncounter extends React.Component {
 
     let isReadytoSubmit = true;
 
-    if (!/^([A-Za-z]\d[A-Za-z][" "]\d[A-Za-z]\d)/.test(this.state.inputs.visitCode)){
+    if (!/^([A-Za-z]\d[A-Za-z][" "]\d[A-Za-z]\d)*$/.test(this.state.inputs.visitCode)){
       this.setState({visitCodeErrors: "Must be in the format of LDL DLD"})
       event.preventDefault();
       event.stopPropagation();
@@ -289,6 +289,7 @@ render(){
           <Form.Control
             required
             type="text"
+            maxLength={7}
             defaultValue={this.state.encounter.visitCode}
             placeholder="ex. A1S 2D3"
             onChange={(e) => this.setState({inputs: {...this.state.inputs, visitCode: e.target.value} })}
@@ -313,6 +314,7 @@ render(){
           <Form.Control
             required
             type="text"
+            maxLength={14}
             defaultValue={this.state.encounter.billingCode}
             placeholder="DDD.DDD.DDD-DD"
             onChange={(e) => this.setState({inputs: {...this.state.inputs, billingCode: e.target.value} })}

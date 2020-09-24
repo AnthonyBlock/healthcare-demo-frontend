@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, InputGroup, Col, Spinner,  } from 'react-bootstrap'
 
-class CreateEncounter extends React.Component {
+class EncounterForm extends React.Component {
 
   constructor(props) {
     super(props);
@@ -9,6 +9,7 @@ class CreateEncounter extends React.Component {
     this.state = {
       loading: true,
       validated: false,
+      encounter: "",
       patientIdErrors: null,
       notesErrors: "",
       visitCodeErrors: "",
@@ -26,6 +27,7 @@ class CreateEncounter extends React.Component {
 
       inputs:{
 
+        id: null,
         patientId: null,
         notes: "",
         visitCode: "",
@@ -38,9 +40,7 @@ class CreateEncounter extends React.Component {
         pulse: "",
         systolic: "",
         diastolic: "",
-        date: "",
-
-        
+        date: ""
       }
 
     }
@@ -201,7 +201,13 @@ class CreateEncounter extends React.Component {
 
     if (isReadytoSubmit) {
       this.setState({validated: true})
-      this.handleCreateEncounter(this.state.inputs)
+      event.preventDefault();
+      if (this.props.match.params.utility === 'create') {
+        this.handleCreateEncounter(this.state.inputs)
+      }
+      if (this.props.match.params.utility === 'edit'){
+        this.handleUpdateEncounter(this.state.inputs)
+      }
     }
     }
 
@@ -219,21 +225,93 @@ class CreateEncounter extends React.Component {
         'mode': 'cors'}),
       body: JSON.stringify(inputs)
     };
-    await fetch(`http://localhost:8080/patients/${this.props.match.params.id}/encounters`, init).then((res) => {
+    await fetch(`http://localhost:8080/patients/${this.props.match.params.patientId}/encounters`, init).then((res) => {
       this.setState({loading: false})
       if (res.status === 201) {
-        window.location.replace(`/patients/${this.props.match.params.id}`);
+        window.location.replace(`/patients/${this.props.match.params.patientId}`);
       }
       else {
         this.setState({oops: 'Oops something went wrong on our end, status ' + res.status, loading: false})
       }
     })}
+
+      /**Takes inputs from handleSubmit and makes post call. If receives a 201, redirects, otherwise shows an error message
+   * 
+   * @param {*} inputs 
+   */
+  async handleUpdateEncounter(inputs){
+    this.setState({loading: true})
+
+    let init = {
+      method: 'PUT',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'mode': 'cors'}),
+      body: JSON.stringify(inputs)
+    };
+    await fetch(`http://localhost:8080/patients/${this.props.match.params.patientId}/encounters/${this.props.match.params.id}`, init).then((res) => {
+      this.setState({loading: false})
+      if (res.ok) {
+        window.location.replace(`/patients/${this.props.match.params.patientId}`);
+      }
+      else {
+        this.setState({oops: 'Oops something went wrong on our end, status ' + res.status, loading: false})
+      }
+    })}
+
+    async getEncounter() {
+        let init = {
+          method: 'GET',
+          headers: new Headers({
+          'Content-Type': 'application/json',
+          'mode': 'cors',
+        }),
+      };
+    
+      let url2 = `http://localhost:8080/patients/${this.props.match.params.patientId}/encounters/${this.props.match.params.id}`;
+      let response2 = await fetch(url2, init);
+      if (!response2.ok) {
+        return null;
+      }
+      else{
+      let data2 = await response2.json();
+      return data2;
+      }
+      }
   
     /**
      * removes the loading wheel after first render
      */
   async componentDidMount() {
-    this.setState({inputs: {...this.state.inputs, patientId: this.props.match.params.id}, loading: false})
+    if (this.props.match.params.utility === 'create') {
+    this.setState({inputs: {...this.state.inputs, patientId: this.props.match.params.patientId}, loading: false})
+    }
+    if (this.props.match.params.utility === 'edit') {
+        await this.getEncounter().then((data => {
+            if (data) {
+              this.setState({encounter: data, inputs: 
+                {
+                    id: this.props.match.params.id,
+                    patientId: this.props.match.params.patientId,
+                    notes: data.notes,
+                    visitCode: data.visitCode,
+                    provider: data.provider,
+                    billingCode: data.billingCode,
+                    icd10: data.icd10,
+                    totalCost: data.totalCost,
+                    copay: data.copay,
+                    chiefComplaint: data.chiefComplaint,
+                    pulse: data.pulse,
+                    systolic: data.systolic,
+                    diastolic: data.diastolic,
+                    date: data.date
+                },  loading: false})
+            }
+            else {
+              this.setState({oops: 'Something went wrong on our end, we are working on fixing it', loading: false})
+            }
+          }))
+    }
   }
 
 render(){
@@ -259,6 +337,7 @@ render(){
             required
             type="text"
             placeholder="Notes"
+            defaultValue={this.state.encounter.notes}
             onChange={(e) => this.setState({inputs: {...this.state.inputs, notes: e.target.value} })}
           />
           <div style={{color: 'red', margin: '0rem'}}>{this.state.notesErrors}</div>
@@ -270,6 +349,7 @@ render(){
             required
             type="text"
             maxLength={7}
+            defaultValue={this.state.encounter.visitCode}
             placeholder="ex. A1S 2D3"
             onChange={(e) => this.setState({inputs: {...this.state.inputs, visitCode: e.target.value} })}
           />
@@ -281,6 +361,7 @@ render(){
           <Form.Control
             required
             type="text"
+            defaultValue={this.state.encounter.provider}
             placeholder="Provider"
             onChange={(e) => this.setState({inputs: {...this.state.inputs, provider: e.target.value} })}
           />
@@ -293,6 +374,7 @@ render(){
             required
             type="text"
             maxLength={14}
+            defaultValue={this.state.encounter.billingCode}
             placeholder="DDD.DDD.DDD-DD"
             value={this.state.inputs.billingCode}
             onChange={this.onBillingChange}
@@ -305,6 +387,7 @@ render(){
           <Form.Control
             required
             type="text"
+            defaultValue={this.state.encounter.icd10}
             placeholder="ex: A20"
             onChange={(e) => this.setState({inputs: {...this.state.inputs, icd10: e.target.value} })}
           >
@@ -317,6 +400,7 @@ render(){
           <Form.Control
             required
             type="number"
+            defaultValue={this.state.encounter.totalCost}
             placeholder="Cost in $"
             onChange={(e) => this.setState({inputs: {...this.state.inputs, totalCost: e.target.value} })}
           />
@@ -329,6 +413,7 @@ render(){
             required
             min='0'
             type="number"
+            defaultValue={this.state.encounter.copay}
             placeholder="Copay $"
             onChange={(e) => this.setState({inputs: ({...this.state.inputs, copay: (e.target.value)}) })}
           />
@@ -341,6 +426,7 @@ render(){
           <Form.Control
             required
             type="textarea"
+            defaultValue={this.state.encounter.chiefComplaint}
             placeholder="Chief Complaint"
             onChange={(e) => this.setState({inputs: ({...this.state.inputs, chiefComplaint: (e.target.value)}) })}
           />
@@ -353,6 +439,7 @@ render(){
           <Form.Control
             min='0'
             type="number"
+            defaultValue={this.state.encounter.pulse}
             placeholder="Pulse BPM"
             onChange={(e) => this.setState({inputs: ({...this.state.inputs, pulse: (e.target.value)}) })}
           />
@@ -364,6 +451,7 @@ render(){
           <Form.Label>Systolic</Form.Label>
             <Form.Control
               type="number"
+              defaultValue={this.state.encounter.systolic}
               placeholder="Systolic"
               onChange={(e) => this.setState({inputs: {...this.state.inputs, systolic: e.target.value} })}
             />
@@ -373,6 +461,7 @@ render(){
           <Form.Label>Diastolic</Form.Label>
             <Form.Control
               type="number"
+              defaultValue={this.state.encounter.diastolic}
               placeholder="Diastolic"
               onChange={(e) => this.setState({inputs: {...this.state.inputs, diastolic: e.target.value} })}
             />
@@ -382,18 +471,23 @@ render(){
       <Form.Row>
         <Form.Group as={Col} md="6" >
           <Form.Label>Date</Form.Label>
-          <Form.Control type="date" format="yyyy-mm-dd" placeholder="YYYY-MM-DD" required value={this.state.date}
-              onChange={(e) => this.setState({inputs: {...this.state.inputs, date: e.target.value} })}>
+          <Form.Control 
+            type="date" 
+            format="yyyy-mm-dd" 
+            required
+            defaultValue={this.state.encounter.date}
+            onChange={(e) => this.setState({inputs: {...this.state.inputs, date: e.target.value} })}>
           </Form.Control>
           <div style={{color: 'red', margin: '0rem'}}>{this.state.dateErrors}</div>
         </Form.Group>
       </Form.Row>
-      <Button variant="secondary" type='submit'>Create</Button>
+      {this.props.match.params.utility === 'create' && <Button variant="secondary" type='submit'>Create</Button>}
+      {this.props.match.params.utility === 'edit' && <Button variant="secondary" type='submit'>Update</Button>}
       <Button variant="secondary" style={{margin: '2%'}}
-    onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}`)}>Back</Button>
+         onClick={()=> window.location.replace(`/patients/${this.props.match.params.patientId}`)}>Back</Button>
     </Form>
     </div>
   )
   }
 }
-export default CreateEncounter;
+export default EncounterForm;

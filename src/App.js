@@ -12,6 +12,7 @@ import EditPatient from './components/EditPatient';
 import CreateEncounter from './components/CreateEncounter';
 import EncounterDetails from './components/EncounterDetails';
 import EditEncounter from './components/EditEncounter';
+import EncounterForm from './components/EncounterForm';
 
 class App extends React.Component {
 
@@ -45,11 +46,11 @@ render() {
           
           <Route exact path ="/patients/edit/:id" render={(props) => (<EditPatient {...props}/>)}/>
 
-          <Route exact path ="/patients/:id/encounters/create" render={(props) => (<CreateEncounter {...props}/>)}/>
+          <Route exact path ="/patients/:patientId/encounters/:utility" render={(props) => (<EncounterForm {...props}/>)}/>
 
-          <Route exact path ="/patients/:patientId/encounters/:id/edit" render={(props) => (<EditEncounter {...props}/>)}/>
+          <Route exact path ="/patients/:patientId/encounters/:id/:utility" render={(props) => (<EncounterForm {...props}/>)}/>
 
-          <Route exact path ="/patients/:patientId/encounters/:id" render={(props) => (<EncounterDetails {...props}/>)}/>
+          <Route exact path ="/patients/:patientId/detailedEncounter/:id" render={(props) => (<EncounterDetails {...props}/>)}/>
 
           </Switch>
         </BrowserRouter>

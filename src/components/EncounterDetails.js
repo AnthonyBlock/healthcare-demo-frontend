@@ -100,6 +100,7 @@ constructor(props) {
             </Tab>
             <Tab style={{margin: "2%"}} eventKey="summary" title="Summary">
             <p>Id: {this.state.encounter.id}</p>
+            <p>Visit Code: {this.state.encounter.visitCode}</p>
             <p>Chief Complaint: {this.state.encounter.chiefComplaint}</p>
             <p>Notes: {this.state.encounter.notes}</p>
             <p>Icd10: {this.state.encounter.icd10}</p>

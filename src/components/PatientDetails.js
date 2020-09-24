@@ -158,7 +158,7 @@ return data2;
         this.state.encounters.map(encounter =>
             <Card key={encounter.id}
              style={{ display: 'inline-block', margin: '1%'}}
-              onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}/encounters/${encounter.id}`)}
+              onClick={()=> window.location.replace(`/patients/${this.props.match.params.id}/detailedEncounter/${encounter.id}`)}
               border={this.state.hovered === encounter.id ? 'warning': 'primary'}
               onMouseEnter={()=>{
                 this.setState({hovered: encounter.id});

@@ -17,6 +17,10 @@ react, to isntall run "npm i react" in the root directory ransom-final-frontend
 
 react-with-bootstrap, to install run "npm i react-with-bootstrap" in the root directory ransom-final-frontend
 
+Link to Backend API:
+
+https://gitlab.catalyt.es/training/cycleworkinggroups/nationwide/associates/ransom-clark/ransom-final-backend.git
+
 ### Linting
 
 Currently the project is unlinted, to install linting, run "npm install eslint-config-airbnb eslint-plugin-jsx-a11y typescript @typescript-eslint/parser", 
